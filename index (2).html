@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SHIVORA AI</title>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+:root{--bg:#0a0a12;--sb:#0e0e18;--pn:#151522;--ln:rgba(255,255,255,.08);--tx:#ececf6;--mu:#8e92ad;--a:#8b6cff;--b:#4f8cff;--g:linear-gradient(135deg,#4f8cff,#8b6cff 60%,#c06bff);--hv:rgba(255,255,255,.06);--code:#0b0b14}
+[data-t=light]{--bg:#f6f5fb;--sb:#edebf6;--pn:#fff;--ln:rgba(20,20,60,.1);--tx:#1b1b2f;--mu:#666a86;--hv:rgba(20,20,60,.06);--code:#f1f0f8}
+*{box-sizing:border-box}html,body{height:100%;margin:0}
+body{display:flex;background:radial-gradient(700px 400px at 55% -10%,rgba(139,108,255,.16),transparent),var(--bg);color:var(--tx);font:15px/1.6 "Segoe UI",Inter,system-ui,Roboto,sans-serif;overflow:hidden}
+button,input,textarea,select{font:inherit;color:inherit}button{cursor:pointer;border:0;background:none}
+:focus-visible{outline:2px solid var(--a);outline-offset:2px}
+.sb{width:272px;background:var(--sb);border-right:1px solid var(--ln);display:flex;flex-direction:column;padding:14px;flex:none;transition:transform .2s;z-index:20}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;letter-spacing:.5px;margin:2px 4px 14px;font-size:17px}.brand svg{width:34px;height:34px}
+.new{display:flex;align-items:center;gap:8px;padding:11px 14px;border-radius:12px;background:var(--g);color:#fff;font-weight:600;box-shadow:0 6px 22px rgba(139,108,255,.35)}
+.new:hover{filter:brightness(1.1)}
+.lbl{color:var(--mu);font-size:12px;margin:18px 6px 6px}
+.hist{flex:1;overflow:auto;display:flex;flex-direction:column;gap:2px}
+.hi{display:flex;align-items:center;border-radius:10px;padding:8px 10px;font-size:14px;color:var(--tx);cursor:pointer}.hi span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hi:hover,.hi.on{background:var(--hv)}.hi .x{opacity:0;color:var(--mu)}.hi:hover .x{opacity:1}
+.foot{border-top:1px solid var(--ln);padding-top:12px}
+.me{display:flex;gap:10px;align-items:center;padding:6px}.me i{width:38px;height:38px;border-radius:50%;background:var(--g);display:grid;place-items:center;color:#fff;font-style:normal;font-weight:700;font-size:13px}
+.me b{display:block;font-size:14px}.me small{color:var(--mu);font-size:12px}
+.fb{display:flex;gap:6px;margin-top:8px}.fb button{flex:1;padding:8px;border-radius:10px;background:var(--hv);font-size:13px}
+.mn{flex:1;min-width:0;display:flex;flex-direction:column;height:100%}
+header{display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid var(--ln)}#ttl{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.sp{flex:1}
+.ic{padding:7px 11px;border-radius:10px;background:var(--hv)}.ic:hover{background:var(--ln)}#mb{display:none}
+#chat{flex:1;overflow:auto;padding:20px 16px}
+.th{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+.row{display:flex;gap:12px}.row.u{justify-content:flex-end}
+.ub{background:var(--pn);border:1px solid var(--ln);padding:10px 16px;border-radius:20px 20px 6px 20px;max-width:82%;white-space:pre-wrap;overflow-wrap:anywhere}
+.av{width:32px;height:32px;flex:none}.av svg{width:100%;height:100%}
+.ab{flex:1;min-width:0;overflow-wrap:anywhere}.ab.w{color:#f59e0b}
+.ab p{margin:0 0 10px}.ab h4{margin:14px 0 6px;font-size:16px}.ab ul,.ab ol{margin:0 0 10px;padding-left:22px}.ab a{color:var(--b)}
+.ab code{background:var(--code);padding:2px 6px;border-radius:6px;font:13px Consolas,monospace}
+.ab pre{position:relative;background:var(--code);border:1px solid var(--ln);border-radius:12px;padding:14px;overflow:auto;margin:0 0 12px}.ab pre code{padding:0;background:none}
+.cp{position:absolute;top:8px;right:8px;font-size:12px;padding:3px 9px;border-radius:8px;background:var(--hv);color:var(--mu)}
+.src{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.src a{font-size:12px;padding:3px 10px;border-radius:99px;background:rgba(139,108,255,.15);color:var(--a);text-decoration:none;max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.acts{display:flex;gap:4px;margin-top:4px}.acts button{font-size:12.5px;padding:4px 9px;border-radius:8px;color:var(--mu)}.acts button:hover{background:var(--hv);color:var(--tx)}
+.dots i{display:inline-block;width:7px;height:7px;margin-right:4px;border-radius:50%;background:var(--a);animation:bn 1s infinite}.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+@keyframes bn{50%{transform:translateY(-5px);opacity:.4}}
+.wel{max-width:760px;margin:6vh auto 0;text-align:center}.wel .orb{width:84px;height:84px;margin:0 auto 18px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#e8dcff,#8b6cff 50%,#1d2a8a);box-shadow:0 0 70px rgba(139,108,255,.65);animation:fl 5s ease-in-out infinite}
+@keyframes fl{50%{transform:translateY(-8px)}}
+.wel h1{font-size:36px;margin:0 0 6px;background:var(--g);-webkit-background-clip:text;background-clip:text;color:transparent}.wel p{color:var(--mu);margin:0 0 26px}
+.ch{display:grid;grid-template-columns:1fr 1fr;gap:10px;text-align:left}
+.ch button{padding:14px 16px;border-radius:14px;background:var(--pn);border:1px solid var(--ln);font-size:14px;text-align:left}.ch button:hover{border-color:var(--a);transform:translateY(-2px)}.ch small{display:block;color:var(--mu);margin-bottom:2px}
+.ch b{display:block}.ch small{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin:2px 0 0}
+.cmp{padding:6px 16px 10px}.box{max-width:760px;margin:0 auto;background:var(--pn);border:1px solid var(--ln);border-radius:22px;padding:10px 12px;box-shadow:0 10px 40px rgba(0,0,0,.18)}.box:focus-within{border-color:var(--a)}
+#ci{width:100%;background:none;border:0;resize:none;outline:0;max-height:200px;padding:6px 6px}
+.tools{display:flex;align-items:center;gap:6px}.tools select{background:var(--hv);border:0;border-radius:99px;padding:5px 10px;font-size:13px}
+.pill{background:var(--hv);border-radius:99px;padding:5px 12px;font-size:13px}#vs{font-size:12px;color:var(--mu)}
+.snd{width:38px;height:38px;border-radius:50%;background:var(--g);color:#fff;font-size:16px}.snd:hover{filter:brightness(1.12)}
+.cr{max-width:760px;margin:8px auto 0;text-align:center;font-size:12px;color:var(--mu)}.cr b{color:var(--tx)}
+.np{width:0;overflow:hidden;background:var(--sb);border-left:1px solid var(--ln);display:flex;flex-direction:column;flex:none;transition:width .2s}.np.on{width:350px}
+.np>*{min-width:350px}.nh{display:flex;align-items:center;gap:8px;padding:14px 14px 8px;font-weight:600}
+.live{width:9px;height:9px;border-radius:50%;background:#ef4444;box-shadow:0 0 0 0 #ef4444aa;animation:pu 1.6s infinite}@keyframes pu{70%{box-shadow:0 0 0 8px transparent}}
+.tabs{display:flex;gap:6px;padding:4px 14px 10px;flex-wrap:wrap}.tabs button{font-size:12.5px;padding:4px 11px;border-radius:99px;background:var(--hv)}.tabs button.on{background:var(--g);color:#fff}
+#nl{flex:1;overflow:auto;padding:0 12px 12px;display:flex;flex-direction:column;gap:8px}
+.nc{background:var(--pn);border:1px solid var(--ln);border-radius:14px;padding:11px 12px}.nc a{color:var(--tx);text-decoration:none;font-weight:600;font-size:14px;line-height:1.4;display:block}.nc a:hover{color:var(--a)}
+.nc small{color:var(--mu);font-size:12px;display:flex;justify-content:space-between;align-items:center;margin-top:6px}.nc button{color:var(--a);font-size:12px}
+.emp{color:var(--mu);padding:14px;font-size:13px}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;place-items:center;z-index:50;padding:16px}.ov.on{display:grid}
+.md{background:var(--pn);border:1px solid var(--ln);border-radius:18px;padding:20px;width:min(480px,100%);display:flex;flex-direction:column;gap:10px}.md h3{margin:0}
+.md input,.md textarea{background:var(--hv);border:1px solid var(--ln);border-radius:10px;padding:9px 11px;width:100%}.md textarea{min-height:130px;resize:vertical}
+.md .r{display:flex;gap:8px;justify-content:flex-end;align-items:center}.md small{color:var(--mu)}.pb{background:var(--g);color:#fff;border-radius:10px;padding:9px 16px;font-weight:600}.gb{background:var(--hv);border-radius:10px;padding:9px 16px}
+@media(max-width:1100px){.np{position:fixed;right:0;top:0;bottom:0;z-index:30}.np.on{width:min(350px,100%)}}
+@media(max-width:820px){.sb{position:fixed;inset:0 auto 0 0;transform:translateX(-100%)}.sb.on{transform:none}#mb{display:block}.ch{grid-template-columns:1fr}.wel h1{font-size:28px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.au{position:fixed;inset:0;z-index:100;display:none;place-items:center;padding:16px;background:radial-gradient(700px 400px at 50% -10%,rgba(139,108,255,.28),transparent),var(--bg);overflow:auto}.au.on{display:grid}
+.ac{width:min(420px,100%);background:var(--pn);border:1px solid var(--ln);border-radius:22px;padding:26px;display:flex;flex-direction:column;gap:11px;box-shadow:0 20px 70px rgba(0,0,0,.4)}
+.ac h2{margin:0;font-size:22px}.ac p{margin:0;color:var(--mu);font-size:13.5px}
+.ac input{background:var(--hv);border:1px solid var(--ln);border-radius:12px;padding:11px 13px;width:100%}.ac input:focus{border-color:var(--a);outline:0}
+.at{display:flex;background:var(--hv);border-radius:12px;padding:4px}.at button{flex:1;padding:8px;border-radius:9px;font-weight:600;color:var(--mu)}.at button.on{background:var(--g);color:#fff}
+.am{font-size:13px;min-height:18px}.am.e{color:#f87171}.am.k{color:#4ade80}
+.lk{color:var(--a);font-size:13px;text-align:center;padding:2px}.ac .pb{padding:11px 16px}.ac .pb:disabled{opacity:.6}
+.st{position:fixed;inset:0;z-index:60;background:var(--bg);display:none;flex-direction:column}.st.on{display:flex}
+.sh{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--ln);font-weight:700}
+.sq{padding:10px 16px 0;max-width:892px;width:100%;margin:0 auto}.sq input{width:100%;background:var(--pn);border:1px solid var(--ln);border-radius:12px;padding:10px 13px}
+.sa{display:flex;gap:8px;flex-wrap:wrap;padding:10px 16px 0;max-width:892px;width:100%;margin:0 auto}.sa button{font-size:13px;padding:7px 13px;border-radius:12px;background:var(--g);color:#fff;font-weight:600}
+.stb{display:flex;gap:6px;padding:10px 16px;overflow-x:auto;flex:none;max-width:892px;width:100%;margin:0 auto}.stb button{white-space:nowrap;font-size:13px;padding:6px 13px;border-radius:99px;background:var(--hv)}.stb button.on{background:var(--g);color:#fff}
+.sl{flex:1;overflow:auto;padding:0 16px 24px;max-width:892px;width:100%;margin:0 auto}
+.it{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid var(--ln)}.yr{flex:none;width:92px;font-weight:700;color:var(--a);font-size:13px;overflow-wrap:anywhere}
+.it b{display:block}.it small{color:var(--mu);display:block;font-size:13.5px;line-height:1.5}
+.ia{display:flex;gap:6px;margin-top:6px}.ia button{font-size:12px;padding:3px 10px;border-radius:99px;background:var(--hv);color:var(--a)}
+</style></head><body>
+<aside class="sb" id="sb">
+ <div class="brand"><span id="lg"></span>SHIVORA AI</div>
+ <button class="new" id="newc">＋ New chat</button>
+ <div class="lbl">Recent chats</div><div class="hist" id="hist"></div>
+ <div class="foot"><div class="me"><i id="mei">U</i><div><b id="men">Guest</b><small id="mes">—</small></div></div>
+ <div class="fb"><button id="thm">🌓 Theme</button><button id="setb">⚙️ Settings</button><button id="lgo">⎋ Logout</button></div></div>
+</aside>
+<main class="mn">
+ <header><button class="ic" id="mb">☰</button><div id="ttl">SHIVORA AI</div><div class="sp"></div><button class="ic" id="sb2">📚 MPSC Study</button><button class="ic" id="nb">📰 Live News</button></header>
+ <div id="chat"></div>
+ <div class="cmp"><div class="box">
+  <textarea id="ci" rows="1" placeholder="Ask anything… / काहीही विचारा…"></textarea>
+  <div class="tools"><select id="lang" title="Voice &amp; news language"><option value="mr">मराठी</option><option value="hi">हिंदी</option><option value="en" selected>English</option></select><button class="pill" id="web">🌐 Search: Auto</button><span id="vs"></span><span class="sp"></span><button class="ic" id="mic" title="Voice">🎤</button><button class="snd" id="send" title="Send">➤</button></div>
+ </div><div class="cr">SHIVORA AI · Created by <b>Shivdhan Shirgole</b> · AI can make mistakes, check important info.</div></div>
+</main>
+<aside class="np" id="np">
+ <div class="nh"><span class="live"></span>Live News<span class="sp"></span><button class="ic" id="nr" title="Refresh">↻</button><button class="ic" id="nx">✕</button></div>
+ <div class="tabs" id="tabs"></div><div id="nl"></div>
+</aside>
+<div class="ov" id="setM"><div class="md"><h3>⚙️ Settings</h3>
+ <input id="ki" type="password" placeholder="Optional: swatachi Gemini API key (nahi takli tari chalte)" autocomplete="off">
+ <input id="km" placeholder="Model (default: gemini-flash-lite-latest)">
+ <input id="wu" placeholder="News Worker URL (optional)">
+ <input id="bu" placeholder="AI Backend (Cloudflare Worker) URL — key nasel tar ha vapra">
+ <small>AI chalvaya sathi ek: (1) swatachi Gemini API key (free: aistudio.google.com/apikey) kiva (2) Worker URL (khali code ahe). Key faqt tumchya browser madhe rahate.</small>
+ <div class="r" style="justify-content:flex-start;gap:8px;margin-top:6px"><button class="gb" id="tst">🔌 Test connection</button><small id="tsm"></small></div>
+ <details style="margin-top:8px"><summary style="cursor:pointer;font-size:13px">☁️ Worker code (Cloudflare) — deploy karun URL upar paste kara</summary>
+  <small>Cloudflare → Workers → Create → ha code paste kara → Settings › Variables madhe <b>GEMINI_KEY</b> (Secret) tak → Deploy. Milalela *.workers.dev URL upar 'AI Backend URL' madhe taka.</small>
+  <pre id="wk" style="max-height:170px;overflow:auto;font-size:11px;white-space:pre-wrap;background:#0003;padding:8px;border-radius:8px;margin:6px 0"></pre>
+  <button class="gb" id="wkc">Copy worker code</button></details>
+ <div class="r"><button class="gb" id="wipe">Delete all chats</button><button class="gb" id="setx">Close</button><button class="pb" id="sets">Save</button></div></div></div>
+<div class="ov" id="mailM"><div class="md"><h3>✉️ Email this</h3>
+ <input id="mt" type="email" placeholder="To: email address"><input id="ms" placeholder="Subject"><textarea id="mb2"></textarea>
+ <div class="r"><small id="mst"></small><button class="gb" id="mx">Cancel</button><button class="pb" id="mgo">Send</button></div></div></div>
+<div class="au on" id="au"><form class="ac" id="ac" autocomplete="on"></form></div>
+<div class="st" id="st"><div class="sh">📚 MPSC · Talathi Study Hub — 0 ते 2026<span class="sp"></span><button class="ic" id="stx">✕</button></div>
+ <div class="sq"><input id="sqi" placeholder="Search: Shivaji, 1857, Panipat, Ambedkar, 7/12…"></div>
+ <div class="sa"><button data-sp="Aajchya mahatvachya current affairs (India + Maharashtra) MPSC/Talathi sathi sang, 10 point madhe, tarkh ani mahatva sah.">📅 Today's Current Affairs</button><button data-sp="MPSC Group C / Talathi level che 10 mixed MCQ de (itihas, bhugol, rajyashastra, Maharashtra GK, current affairs). Options A-D, shevti answers ani 1 line explanation de.">🎯 10 MCQ Mock</button><button data-sp="Mala MPSC/Talathi sathi 30 diwsacha study plan de: roj kiti vel, konte vishay, revision ani mock test sah.">🗓️ 30-day Plan</button><button data-sp="India ani Maharashtracha itihas varsh 0 te 2026 paryant ek-ek yugat (prachin, madhyayugin, Shivkal, Peshwa, British, swatantrya chalval, swatantryottar) mahatvachya ghatna tarkhe sah revision notes madhe sang.">🧠 0–2026 Revision Notes</button></div>
+ <div class="stb" id="stb"></div><div class="sl" id="sl"></div></div>
+<script>
+/* ====== EmailJS (same account/template as ApexVolt) ====== */
+const EJS={SERVICE_ID:"service_utiba9a",TEMPLATE_ID:"template_6tesf8r",PUBLIC_KEY:"ly0Z7_DwsSGmyS0l_"};
+try{if(window.emailjs)emailjs.init({publicKey:EJS.PUBLIC_KEY})}catch(e){}
+async function sendEJS(p){if(!window.emailjs)return{ok:false,reason:"EmailJS script not loaded (internet check kara)"};
+ try{const r=await emailjs.send(EJS.SERVICE_ID,EJS.TEMPLATE_ID,p);return{ok:r.status===200}}catch(e){return{ok:false,reason:e.text||e.message||"send_failed"}}}
+/* ====== helpers ====== */
+const $=i=>document.getElementById(i);
+let UID='',UNAME='';const kk=k=>/^sv_(chats|cid)$/.test(k)&&UID?k+'::'+UID:k;
+const get=(k,d)=>{try{const v=localStorage.getItem(kk(k));return v?JSON.parse(v):d}catch(e){return d}};
+const put=(k,v)=>{try{localStorage.setItem(kk(k),JSON.stringify(v))}catch(e){}};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const LOGO='<svg viewBox="0 0 32 32"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4f8cff"/><stop offset=".6" stop-color="#8b6cff"/><stop offset="1" stop-color="#c06bff"/></linearGradient></defs><rect width="32" height="32" rx="9" fill="url(#g)"/><path d="M21 9.5c-1.5-1.3-3.2-1.8-5-1.8-3 0-4.8 1.6-4.8 3.8 0 2.4 2 3.2 4.8 3.9 2.7.7 4.8 1.5 4.8 4.1 0 2.4-2 4-5 4-2 0-3.8-.7-5.2-2" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><circle cx="23.5" cy="7.5" r="1.8" fill="#fff"/></svg>';
+$('lg').innerHTML=LOGO;
+let chats=[],cid=null,msgs=[],busy=false,ctl=null,raf=0,webMode=get('sv_web','auto');
+document.documentElement.dataset.t=get('sv_theme','dark');
+$('thm').onclick=()=>{const t=document.documentElement.dataset.t==='dark'?'light':'dark';document.documentElement.dataset.t=t;put('sv_theme',t)};
+/* ====== markdown ====== */
+function md(s){const B=[];
+ s=esc(s).replace(/```(\w*)\n?([\s\S]*?)```/g,(m,l,c)=>{B.push('<pre><button class="cp" data-cp>Copy</button><code>'+c.replace(/\n$/,'')+'</code></pre>');return '\u0000'+(B.length-1)+'\u0000'});
+ const inl=t=>t.replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>').replace(/\[([^\]]+)\]\((https:[^)\s]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>');
+ let out='',list='';const cl=()=>{if(list){out+='</'+list+'>';list=''}};
+ for(const ln of s.split('\n')){let m;
+  if(m=ln.match(/^\s*[-*•]\s+(.*)/)){if(list!=='ul'){cl();out+='<ul>';list='ul'}out+='<li>'+inl(m[1])+'</li>'}
+  else if(m=ln.match(/^\s*\d+[.)]\s+(.*)/)){if(list!=='ol'){cl();out+='<ol>';list='ol'}out+='<li>'+inl(m[1])+'</li>'}
+  else if(m=ln.match(/^#{1,4}\s+(.*)/)){cl();out+='<h4>'+inl(m[1])+'</h4>'}
+  else if(!ln.trim())cl();
+  else if(/^\u0000\d+\u0000$/.test(ln.trim())){cl();out+=ln.trim()}
+  else{cl();out+='<p>'+inl(ln)+'</p>'}}
+ cl();return out.replace(/\u0000(\d+)\u0000/g,(m,i)=>B[i])}
+/* ====== render ====== */
+const CHIPS=[['📰','Aajchya tajya batmya',1,'Aajchya tajya batmya sang'],['🇮🇳','India news',1,'Latest India news today'],['✉️','Email lihi',0,'Mazya boss la leave sathi professional email lihi: '],['📚','MPSC abhyas',0,'MPSC Group C sathi ya topic che 10 MCQ uttarasah de: '],['🌐','Translate',0,'Ha text Marathi madhun English madhe translate kar: '],['📝','Saar kadh',0,'Hya mahitiche 5 point madhe saar kadh: '],['💡','Sope karun sang',0,'Ha vishay saadhya bhashet, udaharan deun samjav: '],['🚀','Business idea',0,'50,000 rupayat suru karta yetil asha 5 business ideas de, fayde-tote sah'],['🎯','MPSC Mock Test',1,'MPSC Group C level che 10 mixed MCQ de (itihas, bhugol, rajyashastra, Maharashtra GK). Options A-D, shevti answers ani 1 line explanation de.'],['📅','Current Affairs',1,'Aajchya mahatvachya current affairs MPSC/Talathi sathi sang, tarkh ani mahatva sah'],['⚔️','Shivaji Maharaj',1,'Chhatrapati Shivaji Maharaj yanchi sampurna timeline (1630 te 1680) varsh ani tarkhe sah sang'],['🏛️','Talathi mahiti',1,'Talathi che kaam, 7/12 (satbara), 8-A, ferfar ani Talathi exam syllabus sang']];
+function msgHTML(m,i,last){
+ if(m.r==='u')return '<div class="row u"><div class="ub">'+esc(m.x)+'</div></div>';
+ const wait=m.x==='…';
+ const src=m.s&&m.s.length?'<div class="src">'+m.s.filter(x=>/^https:/.test(x.u)).slice(0,5).map(x=>'<a href="'+esc(x.u)+'" target="_blank" rel="noopener">'+esc(x.t)+'</a>').join('')+'</div>':'';
+ const acts=wait?'':'<div class="acts"><button data-cm="'+i+'">⧉ Copy</button><button data-em="'+i+'">✉ Email</button>'+(last&&!busy?'<button data-rg>↻ Retry</button>':'')+'</div>';
+ return '<div class="row a"><div class="av">'+LOGO+'</div><div class="ab'+(m.w?' w':'')+'">'+(wait?'<span class="dots"><i></i><i></i><i></i></span>':md(m.x))+src+acts+'</div></div>'}
+function render(){const c=$('chat');
+ if(!msgs.length){const h=new Date().getHours();
+  c.innerHTML='<div class="wel"><div class="orb"></div><h1>'+(h<12?'Good morning':h<17?'Good afternoon':'Good evening')+', '+(UNAME||'Namaskar')+' ✦</h1><p>Marathi · Hindi · English — live news ani latest mahiti, ek jaagi.</p><div class="ch">'+CHIPS.map(x=>'<button data-q="'+esc(x[3])+'" data-s="'+x[2]+'"><b>'+x[0]+' '+esc(x[1])+'</b><small>'+esc(x[3])+'</small></button>').join('')+'</div></div>'}
+ else c.innerHTML='<div class="th">'+msgs.map((m,i)=>msgHTML(m,i,i===msgs.length-1)).join('')+'</div>';
+ c.scrollTop=c.scrollHeight;
+ const cc=chats.find(x=>x.id===cid);$('ttl').textContent=cc&&cc.t?cc.t:'SHIVORA AI';
+ $('send').textContent=busy?'■':'➤'}
+function histUI(){$('hist').innerHTML=chats.map(c=>'<div class="hi'+(c.id===cid?' on':'')+'" data-id="'+c.id+'"><span>'+esc(c.t||'Chat')+'</span><button class="x" data-d="'+c.id+'" title="Delete">🗑</button></div>').join('')||'<div class="emp">Chats ithe disatil.</div>'}
+function loadCur(){const c=chats.find(x=>x.id===cid);msgs=c?c.msgs.filter(m=>m.x&&m.x!=='…'):[]}
+function saveCur(){if(!msgs.length)return;let c=chats.find(x=>x.id===cid);if(!c){cid=Date.now();c={id:cid,t:'',msgs:[]};chats.unshift(c)}
+ c.msgs=msgs.filter(m=>m.x&&m.x!=='…').map(m=>({r:m.r,x:m.x,w:m.w,s:m.s}));if(!c.t){const f=msgs.find(m=>m.r==='u');c.t=(f?f.x:'Chat').slice(0,42)}
+ chats=chats.slice(0,60);put('sv_chats',chats);put('sv_cid',cid);histUI()}
+$('hist').onclick=e=>{const d=e.target.closest('[data-d]');if(d){e.stopPropagation();chats=chats.filter(c=>String(c.id)!==d.dataset.d);put('sv_chats',chats);if(String(cid)===d.dataset.d){cid=null;msgs=[]}histUI();render();return}
+ const h=e.target.closest('[data-id]');if(h&&!busy){cid=+h.dataset.id;put('sv_cid',cid);loadCur();histUI();render();$('sb').classList.remove('on')}};
+$('newc').onclick=()=>{if(busy)return;cid=null;put('sv_cid',null);msgs=[];histUI();render();$('sb').classList.remove('on');$('ci').focus()};
+$('mb').onclick=()=>$('sb').classList.toggle('on');
+$('web').onclick=()=>{webMode=webMode==='auto'?'on':webMode==='on'?'off':'auto';put('sv_web',webMode);webUI()};
+const webUI=()=>$('web').textContent='🌐 Search: '+{auto:'Auto',on:'On',off:'Off'}[webMode];
+/* ====== live news ====== */
+const TABS=[['India','India'],['Current Affairs','current affairs India'],['MPSC','MPSC'],['Govt Jobs','government jobs recruitment Maharashtra'],['Maharashtra','Maharashtra'],['World','world'],['Tech','technology'],['Business','India business'],['Sports','cricket']];
+let ntab=0;const ncache={};
+const ago=d=>{const t=new Date(d);if(isNaN(t))return'';const m=Math.round((Date.now()-t)/6e4);return m<1?'now':m<60?m+' min ago':m<1440?Math.round(m/60)+' h ago':Math.round(m/1440)+' d ago'};
+async function newsGet(q,l){
+ const w=(get('sv_news','')||'').trim().replace(/\/$/,'');
+ if(w){try{const r=await fetch(w+'?q='+encodeURIComponent(q)+'&lang='+l);const d=await r.json();if((d.items||[]).length)return d.items.map(x=>({title:x.title,link:x.link,date:x.date,source:x.source||''}))}catch(e){}}
+ const loc={mr:['mr','IN:mr'],hi:['hi','IN:hi'],en:['en-IN','IN:en']}[l]||['en-IN','IN:en'];
+ const rss='https://news.google.com/rss/search?q='+encodeURIComponent(q+' when:2d')+'&hl='+loc[0]+'&gl=IN&ceid='+loc[1];
+ const r=await fetch('https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent(rss));const d=await r.json();if(d.status!=='ok')throw 0;
+ return d.items.map(x=>{const i=x.title.lastIndexOf(' - ');return{title:i>0?x.title.slice(0,i):x.title,source:i>0?x.title.slice(i+3):'',link:x.link,date:x.pubDate.replace(' ','T')+'Z'}})}
+async function newsLoad(force){
+ $('tabs').innerHTML=TABS.map((t,i)=>'<button data-t="'+i+'" class="'+(i===ntab?'on':'')+'">'+t[0]+'</button>').join('');
+ const l=$('lang').value,k=ntab+l;
+ if(!force&&ncache[k]&&Date.now()-ncache[k].t<3e5)return drawNews(ncache[k].i);
+ $('nl').innerHTML='<div class="emp">Loading…</div>';
+ try{const it=await newsGet(TABS[ntab][1],l);ncache[k]={t:Date.now(),i:it};drawNews(it)}
+ catch(e){$('nl').innerHTML='<div class="emp">News load jhali nahi. Internet check kara ani ↻ dabaa.</div>'}}
+function drawNews(it){window._n=it;$('nl').innerHTML=it.slice(0,12).map((x,i)=>'<div class="nc"><a href="'+esc(x.link)+'" target="_blank" rel="noopener">'+esc(x.title)+'</a><small><span>'+esc(x.source)+(x.date?' · '+ago(x.date):'')+'</span><button data-ai="'+i+'">✦ Ask AI</button></small></div>').join('')||'<div class="emp">Kahi sapadla nahi.</div>'}
+$('tabs').onclick=e=>{const b=e.target.closest('[data-t]');if(b){ntab=+b.dataset.t;newsLoad()}};
+$('nl').onclick=e=>{const b=e.target.closest('[data-ai]');if(b)sendMsg('Ya batmi cha saar sang ani mahatva sang: '+window._n[b.dataset.ai].title)};
+$('nb').onclick=()=>{$('np').classList.toggle('on');if($('np').classList.contains('on'))newsLoad()};
+$('nx').onclick=()=>$('np').classList.remove('on');$('nr').onclick=()=>newsLoad(true);$('lang').onchange=()=>{if($('np').classList.contains('on'))newsLoad()};
+/* ====== AI (Gemini + Google Search) ====== */
+const BACKEND=''; // Cloudflare Worker URL paste kara (worker.js) — mag users na kahich setup nako
+const MODEL=()=>get('sv_model','')||'gemini-flash-lite-latest';
+const NEWS=/current affairs|ghadamodi|घडामोडी|bharti|भरती|vacancy|news|latest|today|current|right now|price|score|weather|result|update|rate\b|live|batmi|batmya|aaj|aajche|ajche|ajun|sadhya|kay chalu|kay jhala|ताज्या|बातम्या|बातमी|आज|आजच्या|ताजा|समाचार|खबर|न्यूज|नवीन|सध्या|भाव|निकाल|किंमत/i;
+const useSearch=v=>webMode==='on'||(webMode==='auto'&&NEWS.test(v));
+const STOP=/\b(today|aaj|ajche|ajun|news|batmi|batmya|sang|sanga|mala|mazi|kay|kaay|ahe|aahe|latest|tell|me|the|about|is|are|what|kon|kela|kasa|chalu|nava|navin|ata|please|pls|tajya|tajyaa)\b/gi;
+const newsQ=v=>{const q=v.replace(STOP,' ').replace(/बातम्या|बातमी|आजच्या|आज|ताज्या|सांग|मला|काय|आहे/g,' ').replace(/[?!.,]/g,' ').replace(/\s+/g,' ').trim();return q.length>=3?q:'India'};
+const MENTOR='The user prepares for MPSC and Talathi Bharti exams. For history, polity, geography, economy, science, Maharashtra GK or current affairs questions act as an exam mentor: give exact years/dates, cause and effect, 3-6 revision points, and include or offer MCQs (options A-D, answer, one-line explanation) when useful. You can cover Indian and Maharashtra history from ancient times to 2026: Satavahanas, Yadavas, Shivaji Maharaj and the Marathas, Peshwas, British era, freedom struggle, social reformers, formation of Maharashtra and modern India. If unsure about a date or number, say so instead of guessing; for 2025-2026 events rely on the fresh news results.';
+const SYS=()=>'You are SHIVORA AI, a friendly personal assistant created by Shivdhan Shirgole (if asked who made you, say so). Now: '+new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'})+' IST. Reply in the same language and style the user writes (Marathi, Hindi, English; if they type Marathi/Hindi in English letters, reply the same way in simple everyday words, not formal). Be clear and direct. Use markdown (lists, code blocks) when helpful. For news or anything recent, use the fresh data/Google Search and give latest facts with dates. Never say you cannot access real-time information. '+MENTOR;
+async function gem(h,search,onText,signal){
+ const key=get('sv_key',''),BK=(BACKEND||get('sv_bk','')||'').trim().replace(/\/$/,'');
+ if(!key&&!BK)return pol(h,onText,signal);
+ const viaW=BK&&!key;
+ const url=viaW?BK+'/?model='+encodeURIComponent(MODEL()):'https://generativelanguage.googleapis.com/v1beta/models/'+MODEL()+':streamGenerateContent?alt=sse';
+ const hd=viaW?{'Content-Type':'application/json'}:{'Content-Type':'application/json','x-goog-api-key':key};
+ const base={systemInstruction:{parts:[{text:SYS()}]},contents:h.map(x=>({role:x.role==='assistant'?'model':'user',parts:[{text:x.content}]}))};
+ const plans=search?[[1,1],[1,0],[0,1],[0,0]]:[[0,1],[0,0]];let last;
+ for(const [sr,th] of plans){
+  const body=Object.assign({},base);if(sr)body.tools=[{google_search:{}}];if(th)body.generationConfig={thinkingConfig:{thinkingBudget:0}};
+  let r;try{r=await fetch(url,{method:'POST',signal,headers:hd,body:JSON.stringify(body)})}
+  catch(e){if(e.name==='AbortError')throw{code:'abort'};throw navigator.onLine===false?{code:'net'}:{code:'err',message:viaW?'Worker la connect hot nahi. Worker URL, ALLOW (CORS) ani GEMINI_KEY check kara. (Settings > Test connection)':'Gemini la connect hot nahi. API key / VPN / network check kara. (Settings > Test connection)'}}
+  if(!r.ok){const d=await r.json().catch(()=>({}));const m=(d.error&&d.error.message)||('HTTP '+r.status);last={code:r.status===429?'rate':'err',message:m};
+   if(r.status===400&&!/api key/i.test(m)||(sr&&(r.status===403||r.status===404)))continue;throw last}
+  const rd=r.body.getReader(),dec=new TextDecoder();let buf='',txt='',src=[];
+  try{for(;;){const {done,value}=await rd.read();if(done)break;buf+=dec.decode(value,{stream:true});let i;
+   while((i=buf.indexOf('\n'))>=0){const ln=buf.slice(0,i).trim();buf=buf.slice(i+1);if(ln.slice(0,5)!=='data:')continue;const j=ln.slice(5).trim();if(!j||j==='[DONE]')continue;let d;try{d=JSON.parse(j)}catch(e){continue}
+    const c=(d.candidates||[])[0];if(!c)continue;(c.content&&c.content.parts||[]).forEach(p=>{if(p.text&&!p.thought)txt+=p.text});
+    ((c.groundingMetadata||{}).groundingChunks||[]).forEach(g=>{if(g.web&&!src.find(x=>x.u===g.web.uri))src.push({u:g.web.uri,t:g.web.title||g.web.uri})});onText(txt)}}}
+  catch(e){if(e.name==='AbortError')throw{code:'abort',text:txt,src};throw{code:'net'}}
+  return{text:txt,src}}
+ throw last||{code:'err',message:'unknown'}}
+async function polSSE(url,hd,body,signal,onText){
+ let r;try{r=await fetch(url,{method:'POST',signal,headers:hd,body:JSON.stringify(body)})}
+ catch(e){if(e.name==='AbortError')throw{code:'abort'};throw{code:'net',message:'blocked/CORS ('+(e&&e.message||'fetch failed')+')'}}
+ if(!r.ok){let tx='';try{tx=(await r.text()).slice(0,60)}catch(_){}throw{code:r.status===429?'rate':'err',message:'HTTP '+r.status+' '+tx}}
+ const rd=r.body.getReader(),dec=new TextDecoder();let buf='',txt='';
+ try{for(;;){const{done,value}=await rd.read();if(done)break;buf+=dec.decode(value,{stream:true});let i;
+  while((i=buf.indexOf('\n'))>=0){const ln=buf.slice(0,i).trim();buf=buf.slice(i+1);if(ln.slice(0,5)!=='data:')continue;const j=ln.slice(5).trim();if(!j||j==='[DONE]')continue;let d;try{d=JSON.parse(j)}catch(e){continue}
+   const t=d.choices&&d.choices[0]&&d.choices[0].delta&&d.choices[0].delta.content;if(t){txt+=t;onText(txt)}}}}
+ catch(e){if(e.name==='AbortError')throw{code:'abort',text:txt};if(!txt)throw{code:'net'}}
+ if(!txt)throw{code:'err',message:'empty'};
+ return{text:txt,src:[]}}
+/* Keyless free chain: no API key needed. Tries each server until one works. */
+async function pol(h,onText,signal){
+ const msgs2=[{role:'system',content:SYS()}].concat(h.map(x=>({role:x.role,content:x.content})));
+ const J={'Content-Type':'application/json'};
+ const tries=[
+  ()=>polSSE('https://text.pollinations.ai/openai',J,{model:'openai-fast',stream:true,messages:msgs2},signal,onText),
+  ()=>polSSE('https://text.pollinations.ai/openai',J,{model:'openai',stream:true,messages:msgs2},signal,onText),
+  ()=>polSSE('https://api.llm7.io/v1/chat/completions',{'Content-Type':'application/json','Authorization':'Bearer unused'},{model:'default',stream:true,messages:msgs2},signal,onText),
+  async()=>{const q=(h[h.length-1].content||'').slice(-1200);const r=await fetch('https://text.pollinations.ai/'+encodeURIComponent(q)+'?system='+encodeURIComponent(SYS().slice(0,600)),{signal}).catch(e=>{throw{code:e.name==='AbortError'?'abort':'net'}});
+   if(!r.ok)throw{code:'err',message:'HTTP '+r.status};const t=await r.text();if(!t.trim())throw{code:'err',message:'empty'};onText(t);return{text:t,src:[]}}
+ ];
+ let last;
+ const names=['Pollinations-fast','Pollinations-openai','LLM7','Pollinations-GET'];const errs=[];let ix=0;
+ for(const t of tries){const nm=names[ix++];try{return await t()}catch(e){if(e&&e.code==='abort')throw e;last=e;errs.push(nm+': '+((e&&e.message)||(e&&e.code)||'error'))}}
+ if(navigator.onLine===false)throw{code:'net'};
+ throw{code:'err',message:'Free keyless AI servers fail jhale → '+errs.join(' | ')+' . Ha message mala pathva.'}}
+async function sendMsg(v){v=(v||'').trim();if(!v)return;
+ if(busy){return}
+ msgs.push({r:'u',x:v});busy=true;saveCur();const a={r:'a',x:'…'};msgs.push(a);render();
+ let h=[];msgs.filter(m=>!m.w&&m!==a&&m.x&&m.x!=='…').slice(-24).forEach(m=>{const r=m.r==='u'?'user':'assistant';if(h.length&&h[h.length-1].role===r)h[h.length-1].content+='\n'+m.x;else h.push({role:r,content:m.x})});
+ while(h.length&&h[0].role!=='user')h.shift();
+ let nsrc=null,got=false;
+ if(useSearch(v)){try{const it=await newsGet(newsQ(v),$('lang').value);if(it.length){got=true;nsrc=it.slice(0,5).map(x=>({u:x.link,t:x.title}));
+   h[h.length-1].content+='\n\n[Fresh Google News headlines, fetched '+new Date().toLocaleString('en-IN',{timeZone:'Asia/Kolkata'})+' IST]\n'+it.slice(0,10).map((x,i)=>(i+1)+'. '+x.title+(x.source?' — '+x.source:'')+' ('+ago(x.date)+')').join('\n')+'\n[Answer using these headlines. Mention source and time. If they do not cover the question, say so honestly. Do not invent facts.]'}}catch(e){}}
+ ctl=new AbortController();
+ try{const r=await gem(h,useSearch(v)&&!got,t=>{a.x=t;if(!raf)raf=requestAnimationFrame(()=>{raf=0;render()})},ctl.signal);a.x=r.text||'(Reply empty aala. Parat try kara.)';a.s=nsrc||r.src}
+ catch(e){if(e.code==='abort'){a.x=(e.text||a.x==='…'?e.text:a.x)||'(Thambavla)';a.s=nsrc}
+  else{a.w=1;a.x=e.code==='net'?'Internet/network problem. Connection check kara ani Retry dabaa.':e.code==='rate'?'Limit lagli (free key chi limit). Thodya velane try kara.':'AI error: '+(e.message||'unknown')}}
+ busy=false;ctl=null;saveCur();render()}
+const go=()=>{if(busy){if(ctl)ctl.abort();return}const v=$('ci').value;$('ci').value='';$('ci').style.height='auto';sendMsg(v)};
+$('send').onclick=go;$('ci').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();go()}};
+$('ci').oninput=e=>{e.target.style.height='auto';e.target.style.height=Math.min(e.target.scrollHeight,200)+'px'};
+$('chat').onclick=e=>{const t=e.target.closest('button');if(!t)return;const d=t.dataset;
+ if(d.q){if(d.s==='1')sendMsg(d.q);else{$('ci').value=d.q;$('ci').focus()}}
+ if('cp' in d){navigator.clipboard.writeText(t.parentElement.querySelector('code').textContent);t.textContent='Copied ✓';setTimeout(()=>t.textContent='Copy',1200)}
+ if(d.cm){navigator.clipboard.writeText(msgs[d.cm].x);t.textContent='✓ Copied';setTimeout(()=>t.textContent='⧉ Copy',1200)}
+ if(d.em){mailOpen(msgs[d.em].x)}
+ if('rg' in d&&!busy){msgs.pop();const u=msgs.pop();if(u)sendMsg(u.x)}};
+/* ====== email ====== */
+function mailOpen(t){const cc=chats.find(x=>x.id===cid);$('ms').value='SHIVORA AI — '+((cc&&cc.t)||'Chat');$('mb2').value=t;$('mst').textContent='';$('mailM').classList.add('on')}
+$('mx').onclick=()=>$('mailM').classList.remove('on');
+$('mgo').onclick=async()=>{const to=$('mt').value.trim();if(!/^\S+@\S+\.\S+$/.test(to)){$('mst').textContent='Valid email taka.';return}
+ $('mst').textContent='Sending…';$('mgo').disabled=true;const now=new Date().toLocaleString('en-IN');
+ const r=await sendEJS({to_email:to,to_name:to,from_name:'SHIVORA AI',subject:$('ms').value||'SHIVORA AI',message:'SHIVORA AI — created by Shivdhan Shirgole\n\n'+$('mb2').value+'\n\nTime: '+now,cust_email:to,cust_mobile:'—',reg_time:now});
+ $('mgo').disabled=false;$('mst').textContent=r.ok?'Sent ✓':'Failed: '+(r.reason||'error');if(r.ok)setTimeout(()=>$('mailM').classList.remove('on'),900)};
+/* ====== settings ====== */
+$('setb').onclick=()=>{$('km').value=get('sv_model','');$('bu').value=get('sv_bk','');$('tsm').textContent='';$('wu').value=get('sv_news','');$('ki').placeholder=get('sv_key','')?'Key saved ✓ (navin taka tar replace hoil)':'Optional: swatachi Gemini API key (nahi takli tari chalte)';$('setM').classList.add('on')};
+$('setx').onclick=()=>$('setM').classList.remove('on');
+$('sets').onclick=()=>{const k=$('ki').value.trim();if(k)put('sv_key',k);$('ki').value='';put('sv_model',$('km').value.trim());put('sv_bk',$('bu').value.trim().replace(/\/$/,''));put('sv_news',$('wu').value.trim());$('setM').classList.remove('on')};
+const WORKER_SRC=`// SHIVORA AI backend — Cloudflare Worker (free). Gemini key ithe secret rahate.
+// Settings > Variables: GEMINI_KEY (Secret). Optional: ALLOW = tumchi site (e.g. https://yourname.github.io)
+export default {
+  async fetch(req, env) {
+    const origin = req.headers.get("Origin") || "";
+    const cors = { "Access-Control-Allow-Origin": env.ALLOW || "*", "Access-Control-Allow-Methods": "POST,OPTIONS", "Access-Control-Allow-Headers": "Content-Type" };
+    if (req.method === "OPTIONS") return new Response(null, { headers: cors });
+    if (req.method !== "POST" || (env.ALLOW && origin !== env.ALLOW)) return new Response("Forbidden", { status: 403, headers: cors });
+    if (!env.GEMINI_KEY) return new Response("GEMINI_KEY secret set kela nahi", { status: 500, headers: cors });
+    const model = new URL(req.url).searchParams.get("model") || "gemini-flash-lite-latest";
+    const body = await req.text();
+    if (body.length > 60000) return new Response("Too big", { status: 413, headers: cors });
+    const r = await fetch("https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(model) + ":streamGenerateContent?alt=sse", {
+      method: "POST", headers: { "Content-Type": "application/json", "x-goog-api-key": env.GEMINI_KEY }, body });
+    return new Response(r.body, { status: r.status, headers: { ...cors, "Content-Type": r.headers.get("Content-Type") || "application/json" } });
+  }
+};`;
+$('wk').textContent=WORKER_SRC;
+$('wkc').onclick=()=>{try{navigator.clipboard.writeText(WORKER_SRC);$('wkc').textContent='Copied ✓';setTimeout(()=>$('wkc').textContent='Copy worker code',1400)}catch(e){}};
+$('tst').onclick=async()=>{const s=$('tsm');
+ const key=$('ki').value.trim()||get('sv_key',''),bk=($('bu').value.trim()||BACKEND||'').replace(/\/$/,''),m=$('km').value.trim()||MODEL();
+ if(!key&&!bk){s.textContent='Adhi key kiva Worker URL taka.';return}
+ s.textContent='Testing…';const body=JSON.stringify({contents:[{role:'user',parts:[{text:'Say OK'}]}]});
+ try{const r=key?await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(m)+':generateContent',{method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':key},body})
+  :await fetch(bk+'/?model='+encodeURIComponent(m),{method:'POST',headers:{'Content-Type':'application/json'},body});
+  if(r.ok){s.textContent='✓ Connected ('+(key?'Gemini key':'Worker')+')';return}
+  let msg='HTTP '+r.status;try{const d=await r.json();if(d.error&&d.error.message)msg=d.error.message}catch(e){try{msg+=' '+(await r.text()).slice(0,80)}catch(_){}}
+  s.textContent='✗ '+msg.slice(0,140)}
+ catch(e){s.textContent=navigator.onLine===false?'✗ Internet nahi ahe.':'✗ Connect hot nahi (URL/CORS/VPN check kara)'}};
+$('wipe').onclick=()=>{if(confirm('Sab chats delete hotil. Pakka?')){chats=[];msgs=[];cid=null;put('sv_chats',[]);put('sv_cid',null);histUI();render()}};
+/* ====== voice ====== */
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;let rec;
+$('mic').onclick=()=>{if(!SR){alert('Voice input sathi Chrome / Edge vapra.');return}if(rec){rec.stop();return}
+ rec=new SR();rec.lang={mr:'mr-IN',hi:'hi-IN',en:'en-IN'}[$('lang').value];
+ rec.onstart=()=>$('vs').textContent='🔴 Listening…';rec.onresult=e=>{$('ci').value=e.results[0][0].transcript};
+ rec.onerror=e=>$('vs').textContent=e.error==='not-allowed'?'Mic allow kara.':'Voice error';rec.onend=()=>{rec=null;setTimeout(()=>$('vs').textContent='',1500)};
+ try{rec.start()}catch(e){rec=null}};
+/* ====== auth (login / register / forgot) ====== */
+const UK='sv_users',SK='sv_sess',ADMIN_EMAIL='shivdhanshirgole085@gmail.com';
+let AU={mode:'login',step:0,f:{name:'',email:''},pw:'',msg:'',err:'',busy:false},lastOtp=0,pend=null;
+const normE=e=>String(e).trim().toLowerCase();
+const rndHex=()=>[...crypto.getRandomValues(new Uint8Array(16))].map(x=>x.toString(16).padStart(2,'0')).join('');
+async function hpw(pw,salt){try{if(window.crypto&&crypto.subtle){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(salt+'|'+pw));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}}catch(e){}
+ let h=5381;const s=salt+'|'+pw;for(let i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))>>>0;return'x'+h.toString(16)}
+const wait=ms=>new Promise(r=>setTimeout(r,ms));let mq=Promise.resolve();
+/* EmailJS free plan = ~1 mail/sec, so mails go one by one */
+const qmail=p=>{mq=mq.then(async()=>{let r=await sendEJS(p);if(!r.ok){await wait(1500);r=await sendEJS(p)}if(!r.ok)console.error('Mail failed',p.to_email,r.reason);await wait(1100)})};
+const nowS=()=>new Date().toLocaleString('en-IN',{dateStyle:'full',timeStyle:'short'});
+const genOtp=()=>String(100000+(crypto.getRandomValues(new Uint32Array(1))[0]%900000));
+async function sendOtp(name,email,purpose){
+ if(Date.now()-lastOtp<30000)throw new Error('30 second thamba, mag parat OTP maaga.');
+ const otp=genOtp(),now=nowS(),what=purpose==='reset'?'password reset':'registration';
+ const r=await sendEJS({to_email:email,to_name:name||email,from_name:'SHIVORA AI',subject:'Your SHIVORA AI '+what+' OTP',
+  message:'SHIVORA AI\n\nHello '+(name||'')+',\n\nYour '+what+' OTP is: '+otp+'\n\nValid for 10 minutes. Do not share it with anyone.\n\nTime: '+now,cust_email:email,cust_mobile:'—',reg_time:now});
+ if(!r.ok)throw new Error('OTP mail geli nahi ('+(r.reason||'unknown')+')');
+ lastOtp=Date.now();pend={otp,exp:Date.now()+6e5,tries:0,email}}
+function chkOtp(c){const p=pend;if(!p)throw new Error('OTP sapadla nahi - Resend kara.');
+ if(Date.now()>p.exp){pend=null;throw new Error('OTP expire jhala - Resend kara.')}
+ if(!/^\d{6}$/.test(c))throw new Error('6-digit OTP taka.');
+ if(p.otp!==c){if(++p.tries>=5){pend=null;throw new Error('Khup chukiche attempts - navin OTP maaga.')}throw new Error('OTP chukicha ahe.')}
+ pend=null}
+function authUI(){const A=AU,I=(id,t,ph,ac,val)=>'<input id="'+id+'" type="'+t+'" placeholder="'+ph+'" autocomplete="'+ac+'" value="'+esc(val||'')+'" required>';
+ const btn=(t)=>'<button class="pb" '+(A.busy?'disabled':'')+'>'+(A.busy?'Please wait…':t)+'</button>';
+ let h='<div class="brand" style="margin:0;justify-content:center"><span style="display:flex">'+LOGO+'</span>SHIVORA AI</div>';
+ if(A.mode!=='reset')h+='<div class="at"><button type="button" data-m="login" class="'+(A.mode==='login'?'on':'')+'">Login</button><button type="button" data-m="register" class="'+(A.mode==='register'?'on':'')+'">Register</button></div>';
+ if(A.mode==='login')h+='<p>Welcome back! Chats, news ani MPSC study ek jaagi.</p>'+I('ae','email','Email','username',A.f.email)+I('ap','password','Password','current-password')+btn('Login')+'<button type="button" class="lk" data-m="reset">Password visarlat?</button>';
+ else if(A.mode==='register'&&A.step===0)h+='<p>Free account banva. Email var 6-digit OTP yeil.</p>'+I('an','text','Tumche nav','name',A.f.name)+I('ae','email','Email','email',A.f.email)+I('ap','password','Password (min 6)','new-password')+btn('Register & send OTP');
+ else if(A.mode==='register')h+='<h2>Email verify kara</h2><p><b>'+esc(A.f.email)+'</b> var 6-digit OTP pathavla ahe (10 min valid, spam pan bagha).</p>'+I('ao','text','6-digit OTP','one-time-code','')+btn('Verify & create account')+'<button type="button" class="lk" data-x="resend">OTP parat pathva</button><button type="button" class="lk" data-x="back">Email badla</button>';
+ else if(A.step===0)h+='<h2>Password reset</h2><p>Registered email taka, OTP pathvu.</p>'+I('ae','email','Email','username',A.f.email)+btn('Send OTP')+'<button type="button" class="lk" data-m="login">← Login var parat</button>';
+ else h+='<h2>Navin password</h2><p><b>'+esc(A.f.email)+'</b> var OTP pathavla ahe.</p>'+I('ao','text','6-digit OTP','one-time-code','')+I('ap','password','Navin password (min 6)','new-password')+btn('Password badla')+'<button type="button" class="lk" data-x="resend">OTP parat pathva</button><button type="button" class="lk" data-m="login">← Login var parat</button>';
+ h+='<div class="am '+(A.err?'e':'k')+'">'+esc(A.err||A.msg||'')+'</div>';
+ $('ac').innerHTML=h;const f=$('ae')&&!$('ae').value?$('ae'):$('an')&&!$('an').value?$('an'):$('ao')||$('ap');if(f)f.focus()}
+async function authSubmit(){const A=AU,v=i=>$(i)?$(i).value:'',users=get(UK,{});
+ if(A.mode==='login'){const em=normE(v('ae'));A.f.email=em;const u=users[em];if(!u)throw new Error('Ha email registered nahi. Adhi Register kara.');
+  if(await hpw(v('ap'),u.salt)!==u.hash)throw new Error('Password chukicha ahe.');
+  u.logins=(u.logins||0)+1;u.last=Date.now();users[em]=u;put(UK,users);enter(em);return}
+ if(A.mode==='register'){
+  if(A.step===0){const name=v('an').trim(),em=normE(v('ae')),pw=v('ap');A.f={name,email:em};
+   if(name.length<2)throw new Error('Tumche nav taka.');if(!/^\S+@\S+\.\S+$/.test(em))throw new Error('Valid email taka.');
+   if(pw.length<6)throw new Error('Password kamit kami 6 characters pahije.');if(users[em])throw new Error('Ha email aadhich registered ahe. Login kara.');
+   await sendOtp(name,em,'reg');A.pw=pw;A.step=1;A.msg='';return}
+  chkOtp(v('ao').trim());
+  const salt=rndHex(),hash=await hpw(A.pw,salt),em=A.f.email,name=A.f.name,at=nowS();
+  users[em]={name,salt,hash,created:Date.now(),logins:1,last:Date.now()};put(UK,users);
+  qmail({to_email:ADMIN_EMAIL,to_name:'Admin',from_name:'SHIVORA AI',subject:'New user registered: '+name,message:'New user registered on SHIVORA AI.\n\nName: '+name+'\nEmail: '+em+'\nTime: '+at,cust_email:em,cust_mobile:'—',reg_time:at});
+  qmail({to_email:em,to_name:name,from_name:'SHIVORA AI',subject:'Welcome to SHIVORA AI, '+name+'!',message:'Namaskar '+name+',\n\nTumcha SHIVORA AI account tayar jhala ahe.\n\nAta tumhi vapru shakta: live news, current affairs, MPSC/Talathi study hub (itihas 0 te 2026, Shivaji Maharaj), MCQ mock tests ani AI chat — marathi, hindi, english madhe.\n\nAll the best for your exam preparation!\n\nTime: '+at,cust_email:em,cust_mobile:'—',reg_time:at});
+  A.pw='';enter(em);return}
+ if(A.step===0){const em=normE(v('ae'));A.f.email=em;const u=users[em];if(!u)throw new Error('Ha email registered nahi.');await sendOtp(u.name,em,'reset');A.step=1;A.msg='';return}
+ const pw=v('ap');if(pw.length<6)throw new Error('Password kamit kami 6 characters pahije.');chkOtp(v('ao').trim());
+ const em=A.f.email,u=users[em];u.salt=rndHex();u.hash=await hpw(pw,u.salt);users[em]=u;put(UK,users);
+ AU={mode:'login',step:0,f:{name:'',email:em},pw:'',msg:'Password badalla ✓ — ata login kara.',err:'',busy:false}}
+$('ac').onsubmit=async e=>{e.preventDefault();if(AU.busy)return;AU.busy=true;AU.err='';AU.msg='';const keep=AU;authUI();
+ try{await authSubmit()}catch(x){AU.err=(x&&x.message)||String(x)}
+ AU.busy=false;if(!$('au').classList.contains('on'))return;authUI()};
+$('ac').onclick=async e=>{const b=e.target.closest('[data-m],[data-x]');if(!b||AU.busy)return;const d=b.dataset;
+ if(d.m){AU={mode:d.m,step:0,f:{name:AU.f.name||'',email:$('ae')?normE($('ae').value):AU.f.email},pw:'',msg:'',err:'',busy:false};authUI();return}
+ if(d.x==='back'){AU.step=0;AU.err='';AU.msg='';pend=null;authUI();return}
+ if(d.x==='resend'){AU.busy=true;AU.err='';authUI();try{const u=get(UK,{})[AU.f.email];await sendOtp(AU.f.name||(u&&u.name)||'',AU.f.email,AU.mode==='reset'?'reset':'reg');AU.msg='OTP parat pathavla ✓'}catch(x){AU.err=x.message}AU.busy=false;authUI()}};
+function authShow(){AU={mode:'login',step:0,f:{name:'',email:''},pw:'',msg:'',err:'',busy:false};$('au').classList.add('on');authUI()}
+function enter(email){const u=get(UK,{})[email];if(!u){authShow();return}
+ UID=email;UNAME=(u.name||'').split(/\s+/)[0];put(SK,{e:email});
+ chats=get('sv_chats',[]);cid=get('sv_cid',null);loadCur();
+ $('au').classList.remove('on');$('men').textContent=u.name;$('mes').textContent=email;
+ $('mei').textContent=(u.name||'U').split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase();
+ histUI();render();if(innerWidth>1250){$('np').classList.add('on');newsLoad()}}
+$('lgo').onclick=()=>{if(busy&&ctl)ctl.abort();try{localStorage.removeItem(SK)}catch(e){}
+ UID='';UNAME='';chats=[];msgs=[];cid=null;busy=false;$('np').classList.remove('on');$('st').classList.remove('on');$('sb').classList.remove('on');authShow()};
+function initAuth(){const s=get(SK,null);if(s&&s.e&&get(UK,{})[s.e])enter(s.e);else authShow()}
+/* ====== MPSC / Talathi study hub (0 - 2026) ====== */
+const SC=[['all','All 0–2026'],['anc','Ancient'],['med','Medieval'],['shv','Shivaji Maharaj'],['mar','Marathas & Peshwa'],['brt','British & Freedom'],['ind','Independent India'],['mah','Maharashtra'],['ex','Exam Tools']];
+const SD=[
+['anc','c. 2600–1900 BCE','Indus Valley Civilisation','Harappa, Mohenjo-daro, planned cities, Great Bath. Daimabad (Ahmednagar district) is the Harappan-linked site in Maharashtra.'],
+['anc','c. 1500–600 BCE','Vedic period','Early Vedic (Rigveda) and Later Vedic (Sama, Yajur, Atharva Veda); janapadas form.'],
+['anc','6th c. BCE','Buddha, Mahavira & Mahajanapadas','Magadha rises; Buddhism and Jainism arise.'],
+['anc','321 BCE','Maurya Empire','Chandragupta Maurya with Chanakya (Kautilya, Arthashastra); Megasthenes wrote Indica.'],
+['anc','261 BCE','Kalinga War — Ashoka','Ashoka adopts Dhamma; rock and pillar edicts.'],
+['anc','c. 230 BCE–220 CE','Satavahanas in Maharashtra','Capital Pratishthan (Paithan); Gautamiputra Satakarni; trade with Rome; Karle, Nashik and early Ajanta caves.'],
+['anc','78 CE','Shaka era','Shaka Samvat, the basis of the Indian national calendar, traditionally begins in 78 CE.'],
+['anc','320 CE','Gupta Empire','Chandragupta I; Samudragupta; Chandragupta II (Vikramaditya); Kalidasa, Aryabhata — the classical "Golden Age".'],
+['anc','5th c. CE','Vakatakas (Vidarbha)','Contemporaries of the Guptas; patrons of Ajanta caves.'],
+['anc','c. 543–753','Chalukyas of Badami','Pulakeshin II checked Harshavardhana on the Narmada (c. 618–619).'],
+['anc','606–647','Harshavardhana','Capital Kannauj; Chinese traveller Xuanzang visited.'],
+['anc','c. 753–982','Rashtrakutas','Capital Manyakheta; Kailasa temple at Ellora built under Krishna I.'],
+['med','1001–1026','Mahmud of Ghazni raids','Sack of Somnath in 1025–26.'],
+['med','c. 1187–1317','Yadavas of Devagiri','Capital Devagiri; minister Hemadri (Hemadpanti architecture); Mahanubhav and Warkari traditions flourish.'],
+['med','1192 / 1206','Tarain II & Delhi Sultanate','Muhammad Ghori defeats Prithviraj Chauhan (1192); Qutb-ud-din Aibak founds the Delhi Sultanate (1206).'],
+['med','c. 1290','Dnyaneshwari','Sant Dnyaneshwar composes the Dnyaneshwari (Bhavartha Deepika) at Nevase; samadhi at Alandi in 1296.'],
+['med','1296','Alauddin Khilji at Devagiri','Yadava king Ramchandra defeated; the Delhi Sultanate enters the Deccan.'],
+['med','1327','Capital shifted to Daulatabad','Muhammad bin Tughlaq moves the capital from Delhi to Devagiri (renamed Daulatabad).'],
+['med','1336 / 1347','Vijayanagara & Bahmani','Harihara–Bukka found Vijayanagara; Hasan Gangu founds the Bahmani Sultanate.'],
+['med','c. 1490–1518','Deccan Sultanates','Bahmani splits: Ahmednagar (Nizamshahi), Bijapur (Adilshahi), Berar, Bidar, Golconda (Qutbshahi).'],
+['med','1498','Vasco da Gama at Calicut','Sea route from Europe to India opens.'],
+['med','1526','First Battle of Panipat','Babur defeats Ibrahim Lodi; Mughal rule begins.'],
+['med','1556','Second Battle of Panipat','Akbar (under Bairam Khan) defeats Hemu.'],
+['med','1565','Battle of Talikota','Deccan sultanates defeat Vijayanagara.'],
+['brt','1600','East India Company chartered','Royal charter on 31 Dec 1600; Surat factory set up in 1613.'],
+['shv','1630 (19 Feb)','Birth of Shivaji Maharaj','Shivneri fort (Junnar); father Shahaji Bhosale, mother Jijabai. 19 Feb 1630 is the date officially adopted by the Maharashtra Govt (some historians favour 1627).'],
+['shv','1645','Oath of Swarajya','Shivaji, in his teens, takes the oath of Hindavi Swarajya at Raireshwar with trusted companions.'],
+['shv','1646','Capture of Torna','First fort captured; Rajgad is built soon after.'],
+['shv','1656','Javali & Raigad','Chandrarao More of Javali defeated; Raigad becomes the capital.'],
+['shv','1659 (10 Nov)','Afzal Khan killed — Pratapgad','Bijapur general Afzal Khan killed at Pratapgad.'],
+['shv','1660 (13 July)','Pavankhind','Baji Prabhu Deshpande holds the pass while Shivaji reaches Vishalgad.'],
+['shv','1663 (Apr)','Raid on Shaista Khan','Surprise attack at Lal Mahal, Pune.'],
+['shv','1664','First sack of Surat','Mughal trade port raided (Jan 1664).'],
+['shv','1665 (June)','Treaty of Purandar','With Mirza Raje Jai Singh: Shivaji gave up 23 forts and kept 12.'],
+['shv','1666','Agra visit & escape','Met Aurangzeb in May 1666; escaped in August.'],
+['shv','1670 (4 Feb)','Sinhagad (Kondhana)','Tanaji Malusare falls while capturing the fort — "gad aala pan sinha gela".'],
+['shv','1674 (6 June)','Coronation — Chhatrapati','Raigad; Gaga Bhatt officiates; Shivrajyabhishek Shaka begins. Ashtapradhan Mandal: Peshwa, Amatya, Sachiv, Mantri, Senapati, Sumant, Nyayadhish, Panditrao.'],
+['shv','1677–78','Karnataka campaign','Alliance with Golconda; Jinji and Vellore captured.'],
+['shv','1680 (3 Apr)','Death of Shivaji Maharaj','At Raigad; Sambhaji succeeds.'],
+['mar','1689 (11 Mar)','Sambhaji executed','Put to death by Aurangzeb at Tulapur.'],
+['mar','1689–1700','Rajaram at Jinji','Maratha war of resistance; Rajaram dies in 1700 and Tarabai acts as regent.'],
+['mar','1707','Aurangzeb dies; Shahu released','Aurangzeb died on 3 Mar 1707 at Ahmednagar; Shahu freed; Satara and Kolhapur gaddis (Treaty of Warna, 1731).'],
+['mar','1713','Balaji Vishwanath — Peshwa','Peshwai becomes hereditary; 1719 agreement with the Sayyid brothers (chauth and sardeshmukhi).'],
+['mar','1720–1740','Peshwa Bajirao I','Palkhed (1728) against the Nizam; Maratha power reaches Delhi (1737).'],
+['mar','1740–1761','Balaji Bajirao (Nanasaheb)','Marathas reach Attock (1758); Pune grows as the capital.'],
+['mar','1761 (14 Jan)','Third Battle of Panipat','Ahmad Shah Abdali defeats the Marathas (Sadashivrao Bhau, Vishwasrao fall).'],
+['mar','1761–1772','Peshwa Madhavrao I','Maratha revival; he dies in 1772.'],
+['mar','1775–82','First Anglo-Maratha War','Ends with the Treaty of Salbai (1782).'],
+['mar','1802–1805','Bassein & Second Anglo-Maratha War','Treaty of Bassein (1802) — subsidiary alliance with Baji Rao II; second war 1803–05.'],
+['mar','1817–18','Third Anglo-Maratha War','Khadki, Koregaon Bhima (1 Jan 1818), Ashti; Peshwai ends in 1818.'],
+['brt','1757 / 1764','Plassey & Buxar','Foundation of British political power in India.'],
+['brt','1818','British rule over Maharashtra','Peshwa territory merged into the Bombay Presidency.'],
+['brt','1832 (6 Jan)','Darpan','Balshastri Jambhekar starts Darpan, the first Marathi newspaper (Patrakar Din).'],
+['brt','1848','Phule girls’ school','Jotiba and Savitribai Phule open a girls’ school at Bhide Wada, Pune.'],
+['brt','1853 (16 Apr)','First railway','Bombay (Bori Bunder) to Thane.'],
+['brt','1857','Revolt of 1857','Began at Meerut on 10 May 1857.'],
+['brt','1873','Satyashodhak Samaj','Founded by Jotiba Phule on 24 Sept 1873; he wrote Gulamgiri (1873).'],
+['brt','1885','Indian National Congress','First session in Bombay, W. C. Bonnerjee presiding; A. O. Hume was a founder.'],
+['brt','1893–95','Tilak: Ganeshotsav & Shivjayanti','Public Ganeshotsav (1893) and Shivjayanti (1895); Kesari and Mahratta started in 1881.'],
+['brt','1905–1911','Partition of Bengal & Swadeshi','Partition 1905; annulled and capital shifted to Delhi in 1911.'],
+['brt','1916–1920','Lucknow Pact & Home Rule','Tilak and Annie Besant launch Home Rule Leagues (1916); Tilak dies on 1 Aug 1920.'],
+['brt','1919 (13 Apr)','Jallianwala Bagh','Also the Montagu–Chelmsford Reforms (dyarchy).'],
+['brt','1920–22','Non-Cooperation & Khilafat','Withdrawn after Chauri Chaura (Feb 1922).'],
+['brt','1927 (Mar)','Mahad Satyagraha','Dr. Babasaheb Ambedkar leads the Chavdar Tale water satyagraha.'],
+['brt','1930','Dandi March','Civil Disobedience Movement begins (12 Mar–6 Apr).'],
+['brt','1932 (24 Sept)','Poona Pact','Between Gandhi and Dr. Ambedkar, after the Communal Award.'],
+['brt','1935','Government of India Act','Provincial autonomy; federal plan.'],
+['brt','1942 (8 Aug)','Quit India','Declared at Gowalia Tank (August Kranti Maidan), Bombay; "Do or Die". Prati Sarkar in Satara.'],
+['brt','1946','Cabinet Mission','Leads to the Constituent Assembly.'],
+['brt','1947 (15 Aug)','Independence & Partition','Indian Independence Act 1947; Mountbatten was the last Viceroy.'],
+['ind','1950 (26 Jan)','Constitution comes into force','Adopted on 26 Nov 1949; Dr. Ambedkar chaired the Drafting Committee.'],
+['ind','1951–52','First general elections','Free India’s first Lok Sabha elections.'],
+['mah','1956 (14 Oct)','Dhammachakra Pravartan','Dr. Ambedkar embraces Buddhism at Nagpur (Deekshabhoomi).'],
+['mah','1956','Samyukta Maharashtra Movement','States Reorganisation Act 1956 creates bilingual Bombay State; movement led by S. M. Joshi, Acharya Atre, Shahir Amar Sheikh, Annabhau Sathe and others.'],
+['mah','1960 (1 May)','Maharashtra state formed','Bombay State split into Maharashtra and Gujarat; first CM Yashwantrao Chavan; capital Mumbai.'],
+['mah','1962 (1 May)','Zilla Parishad system','Maharashtra Zilla Parishads and Panchayat Samitis Act, 1961, came into force on 1 May 1962.'],
+['ind','1962 / 65 / 71','Wars','India–China 1962; India–Pakistan 1965 and 1971 (Bangladesh created).'],
+['ind','1975–77','Emergency','Declared 25 June 1975; lifted March 1977.'],
+['ind','1991','LPG reforms','Liberalisation, Privatisation, Globalisation (Narasimha Rao – Manmohan Singh).'],
+['ind','1992–93','73rd & 74th Amendments','Panchayati Raj and Municipalities get constitutional status.'],
+['mah','1993 (30 Sept)','Latur (Killari) earthquake','Major earthquake in Marathwada.'],
+['ind','2005','RTI & MGNREGA','Right to Information Act and the rural employment guarantee scheme.'],
+['ind','2009–10','Right to Education','RTE Act came into force on 1 Apr 2010.'],
+['ind','2014','Telangana formed','Telangana became a state on 2 June 2014; new Lok Sabha government.'],
+['ind','2016–17','Demonetisation & GST','Demonetisation on 8 Nov 2016; GST from 1 July 2017.'],
+['ind','2019 (5 Aug)','Article 370 revoked','Jammu & Kashmir Reorganisation Act.'],
+['ind','2020–21','COVID-19','National lockdown from 25 Mar 2020.'],
+['ind','2023','Chandrayaan-3 & Women’s Reservation','Chandrayaan-3 landed on 23 Aug 2023; Nari Shakti Vandan Adhiniyam (106th Amendment) passed in Sept 2023.'],
+['ind','2024','18th Lok Sabha election','Held April–June 2024; NDA government formed.'],
+['ind','2025–2026','Latest current affairs','Use the Live News → Current Affairs tab or the 📅 button above — do not rely on memory for the latest events.'],
+['mah','Facts','Maharashtra at a glance','36 districts; 6 revenue divisions (Konkan, Pune, Nashik, Chhatrapati Sambhajinagar, Amravati, Nagpur); 288 Assembly seats; 48 Lok Sabha and 19 Rajya Sabha seats.'],
+['ex','Talathi','Talathi duties & land records','7/12 (satbara), 8-A, ferfar (mutation), village records; Maharashtra Land Revenue Code, 1966. Always confirm the syllabus in the official notification.'],
+['ex','Marathi','Marathi grammar','Sandhi, samas, alankar, vibhakti, mhani aani vakprachar, shabdasangrah.'],
+['ex','English','English grammar & vocabulary','Tenses, articles, prepositions, synonyms/antonyms, error spotting.'],
+['ex','GK','Maharashtra & India GK','History, geography, polity, economy, science, current affairs.'],
+['ex','Maths','Arithmetic & Reasoning','Percentage, ratio, profit-loss, time-work, series, coding-decoding.']];
+let sc='all';
+function stDraw(){const q=$('sqi').value.trim().toLowerCase();
+ $('stb').innerHTML=SC.map(c=>'<button data-sc="'+c[0]+'" class="'+(c[0]===sc?'on':'')+'">'+c[1]+'</button>').join('');
+ const L=SD.map((x,i)=>[x,i]).filter(([x])=>(sc==='all'||x[0]===sc)&&(!q||(x[1]+' '+x[2]+' '+x[3]).toLowerCase().includes(q)));
+ $('sl').innerHTML=L.map(([x,i])=>'<div class="it"><div class="yr">'+esc(x[1])+'</div><div><b>'+esc(x[2])+'</b><small>'+esc(x[3])+'</small><div class="ia"><button data-se="'+i+'">✦ Explain</button><button data-sm="'+i+'">📝 5 MCQ</button></div></div></div>').join('')||'<div class="emp">Kahi sapadla nahi.</div>'}
+function stAsk(t){$('st').classList.remove('on');sendMsg(t)}
+$('sb2').onclick=()=>{$('st').classList.add('on');stDraw()};$('stx').onclick=()=>$('st').classList.remove('on');$('sqi').oninput=stDraw;
+$('st').onclick=e=>{const b=e.target.closest('button');if(!b)return;const d=b.dataset;
+ if(d.sc){sc=d.sc;stDraw()}
+ else if(d.sp)stAsk(d.sp)
+ else if(d.se){const x=SD[d.se];stAsk(`MPSC/Talathi sathi "${x[1]} — ${x[2]}" he saral bhashet samjav: kaaran, mukhya ghadamodi, parinaam ani exam madhe vicharle jaanare 3 mahatvache mudde.`)}
+ else if(d.sm){const x=SD[d.sm];stAsk(`"${x[2]}" (${x[1]}) var MPSC/Talathi level che 5 MCQ de. Options A-D, shevti answers ani 1 line explanation de.`)}};
+webUI();initAuth();
+</script></body></html>
